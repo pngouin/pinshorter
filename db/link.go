@@ -25,7 +25,6 @@ func (l Link) Scan(row *sql.Row) (models.Link, error) {
 		&result.Title,
 		&result.URL,
 		&result.ApiPoint,
-		&result.Count,
 		&created,
 	)
 
@@ -73,7 +72,7 @@ func (l Link) ScanRows(rows *sql.Rows) ([]models.Link, error) {
 func (l Link) Create(link models.Link) (models.Link, error) {
 	link.Id = createUUID()
 	_, err := l.db.Exec("INSERT INTO link (link_id, title, url, api_point, created_at, user_id) VALUES (?, ?, ?, ?, CAST(datetime('now') as TEXT), ?)",
-		link.Id, link.Title, link.URL, link.Count, link.ApiPoint, link.User.Id)
+		link.Id, link.Title, link.URL, link.ApiPoint, link.User.Id)
 	return link, err
 }
 

@@ -33,6 +33,7 @@ func (l Link) Redirect(c echo.Context) error {
 		jsonErr := models.Error{Error: err.Error()}
 		return c.JSON(http.StatusBadRequest, jsonErr)
 	}
+	defer l.link.AddCountToLink(link)
 	return c.Redirect(http.StatusPermanentRedirect, link.URL)
 }
 

@@ -6,6 +6,7 @@ import (
 	"github.com/ZooPin/pinshorter/db"
 	"github.com/ZooPin/pinshorter/models"
 	"golang.org/x/net/html"
+	"log"
 	"math/rand"
 	"net/http"
 	"time"
@@ -16,12 +17,14 @@ func NewLink(sql *sql.DB) Link {
 	return Link{
 		database: db.NewLink(sql),
 		client:   http.Client{Timeout: 10 * time.Second},
+		count:    NewCount(sql),
 	}
 }
 
 type Link struct {
 	database db.Link
 	client   http.Client
+	count    Count
 }
 
 const (
@@ -65,6 +68,13 @@ func (l Link) GetById(link models.Link) (models.Link, error) {
 
 func (l Link) GetAllFromUser(user models.UserInfo) ([]models.Link, error) {
 	return l.database.GetAllByUser(user)
+}
+
+func (l Link) AddCountToLink(link models.Link) {
+	err := l.count.Add(link)
+	if err != nil {
+		log.Println("error cannot add count to", link.Id, " with user", link.User.Id, "error: ", err)
+	}
 }
 
 func (l Link) getTitleFromBody(data *http.Response) (string, error) {

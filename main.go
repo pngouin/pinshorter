@@ -53,7 +53,7 @@ func main() {
 	link := handler.NewLink(db)
 	user := handler.NewUser(db, secret)
 
-	e.GET("", link.Redirect)
+	e.GET("/:api_point", link.Redirect)
 	e.POST("login", user.Login)
 
 	p := e.Group("/link")
