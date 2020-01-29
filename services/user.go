@@ -14,7 +14,7 @@ type User struct {
 	database db.User
 }
 
-func (u User) Connection(user models.UserConn) (bool, error) {
+func (u User) Connection(user models.UserConn) (models.UserInfo, bool, error) {
 	return u.database.Connection(user)
 }
 

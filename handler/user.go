@@ -32,7 +32,7 @@ func (u User) Login(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, jsonErr)
 	}
 
-	ok, err := u.user.Connection(user)
+	uInfo, ok, err := u.user.Connection(user)
 	if err != nil {
 		jsonErr := models.Error{Error: err.Error()}
 		return c.JSON(http.StatusBadRequest, jsonErr)
@@ -43,8 +43,8 @@ func (u User) Login(c echo.Context) error {
 
 	token := jwt.New(jwt.SigningMethodHS512)
 	claims := token.Claims.(jwt.MapClaims)
-	claims["id"] = user.Id
-	claims["name"] = user.Name
+	claims["id"] = uInfo.Id
+	claims["name"] = uInfo.Name
 	claims["exp"] = time.Now().Add(72 * time.Hour)
 
 	t, err := token.SignedString([]byte(u.secret))

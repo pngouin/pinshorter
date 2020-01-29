@@ -6,11 +6,15 @@ import (
 )
 
 func NewUser(db *sql.DB) User {
-	return User{db: db}
+	return User{
+		db:    db,
+		crypt: NewCrypt(db),
+	}
 }
 
 type User struct {
-	db *sql.DB
+	db    *sql.DB
+	crypt Crypt
 }
 
 func (u User) ScanConnection(row *sql.Row) (models.UserConn, error) {
@@ -28,15 +32,15 @@ func (u User) ScanInfo(row *sql.Row) (models.UserInfo, error) {
 func (u User) Add(user models.UserConn) (models.UserInfo, error) {
 	user.Id = createUUID()
 	_, err := u.db.Exec("INSERT INTO user (user_id, name, password, created_at) VALUES (?, ?, ?, cast(datetime('now') as text))",
-		user.Id, user.Name, user.Password)
+		user.Id, user.Name, u.crypt.Hash(user.Password))
 	return user.ToUserInfo(), err
 }
 
-func (u User) Connection(conn models.UserConn) (bool, error) {
+func (u User) Connection(conn models.UserConn) (models.UserInfo, bool, error) {
 	var pass int
-	row := u.db.QueryRow("SELECT count(*) from user where name=? and password=? and deleted_at is null", conn.Name, conn.Password)
-	err := row.Scan(&pass)
-	return pass != 0, err
+	row := u.db.QueryRow("SELECT user_id, count(*) from user where name=? and password=? and deleted_at is null", conn.Name, u.crypt.Hash(conn.Password))
+	err := row.Scan(&conn.Id, &pass)
+	return conn.ToUserInfo(), pass != 0, err
 }
 
 func (u User) GetById(user models.UserInfo) (models.UserInfo, error) {
