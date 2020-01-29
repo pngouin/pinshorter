@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS user (
     user_id TEXT PRIMARY KEY,
-    name TEXT NOT NULL,
+    name TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
     created_at TEXT NOT NULL,
     deleted_at TEXT
@@ -23,3 +23,7 @@ CREATE TABLE IF NOT EXISTS count (
     link_id TEXT NOT NULL,
     FOREIGN KEY (link_id) REFERENCES link(link_id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS params (
+    salt TEXT
+)

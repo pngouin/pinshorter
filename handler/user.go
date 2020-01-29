@@ -7,6 +7,7 @@ import (
 	"github.com/ZooPin/pinshorter/services"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"
+	"log"
 	"net/http"
 	"time"
 )
@@ -41,14 +42,18 @@ func (u User) Login(c echo.Context) error {
 		return echo.ErrUnauthorized
 	}
 
-	token := jwt.New(jwt.SigningMethodHS512)
-	claims := token.Claims.(jwt.MapClaims)
-	claims["id"] = uInfo.Id
-	claims["name"] = uInfo.Name
-	claims["exp"] = time.Now().Add(72 * time.Hour)
+	claims := models.Token{
+		Name: uInfo.Name,
+		Id:   uInfo.Id,
+		StandardClaims: jwt.StandardClaims{
+			ExpiresAt: time.Now().Add(72 * time.Hour).Unix(),
+		},
+	}
 
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	t, err := token.SignedString([]byte(u.secret))
 	if err != nil {
+		log.Println("Error signing token: ", err)
 		return echo.ErrInternalServerError
 	}
 

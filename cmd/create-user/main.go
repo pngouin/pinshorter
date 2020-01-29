@@ -8,6 +8,7 @@ import (
 	"github.com/ZooPin/pinshorter/models"
 	"log"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -29,10 +30,10 @@ func main() {
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Print("Username: ")
 	in, _ := reader.ReadString('\n')
-	userConn.Name = in
+	userConn.Name = strings.TrimSuffix(in, "\n")
 	fmt.Print("Password: ")
 	in, _ = reader.ReadString('\n')
-	userConn.Password = in
+	userConn.Password = strings.TrimSuffix(in, "\n")
 	userInfo, err := user.Add(userConn)
 	if err != nil {
 		log.Fatalln("Error creating user: ", err)
