@@ -25,11 +25,10 @@ type Link struct {
 }
 
 const (
-	length   = 6
-	digits   = "0123456789"
-	letters  = "abcdefghijklmnopqrstuvwxyz" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	specials = "!?="
-	all      = digits + letters + specials
+	length  = 5
+	digits  = "0123456789"
+	letters = "abcdefghijklmnopqrstuvwxyz" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	all     = digits + letters
 )
 
 func (l Link) Add(link models.Link) (models.Link, error) {
@@ -76,15 +75,16 @@ func (l Link) getTitleFromBody(data *http.Response) (string, error) {
 	var title string
 	var crawler func(node *html.Node)
 	crawler = func(node *html.Node) {
-		if node.Type == html.ElementNode && node.Data == "title" {
+		if node.Type == html.TextNode && node.Parent.Data == "title" && node.Parent.Type == html.ElementNode {
 			title = node.Data
+			return
 		}
 		for child := node.FirstChild; child != nil; child = child.NextSibling {
 			crawler(child)
 		}
 	}
 
-	crawler(body.FirstChild)
+	crawler(body)
 	if title == "" {
 		return "", errors.New("missing <tittle> in the node tree")
 	}

@@ -36,7 +36,7 @@ func (l Link) Redirect(c echo.Context) error {
 	return c.Redirect(http.StatusPermanentRedirect, link.URL)
 }
 
-// POST /add to create a short link !secure
+// PUT /add to create a short link !secure
 func (l Link) Add(c echo.Context) error {
 	var link models.Link
 

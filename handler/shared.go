@@ -13,7 +13,7 @@ const (
 func getUserJWT(c echo.Context) models.UserInfo {
 	var user models.UserInfo
 
-	t := c.Get("id").(*jwt.Token)
+	t := c.Get("user").(*jwt.Token)
 	claims := t.Claims.(jwt.MapClaims)
 	user.Id = claims["id"].(string)
 	user.Name = claims["name"].(string)
