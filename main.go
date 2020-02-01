@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"flag"
 	sqlHelp "github.com/ZooPin/pinshorter/db"
 	"github.com/ZooPin/pinshorter/handler"
 	"github.com/labstack/echo/v4"
@@ -13,20 +12,20 @@ import (
 	"time"
 )
 
-var sqlFile string
-var dbName string
+var queryString string
 var secret string
 
 func init() {
-	flag.StringVar(&sqlFile, "query", "create_postgres.query", "Path to the query file to create the database.")
-	flag.StringVar(&dbName, "database", "db/database.db", "Path to the database.")
+	queryString = os.Getenv("DATABASE")
 	secret = os.Getenv("PINSHORTER_SECRET")
-	flag.Parse()
 }
 
 func main() {
 	if secret == "" {
 		log.Fatalln("Environment variable PINSHORTER_SECRET not set")
+	}
+	if queryString == "" {
+		log.Fatalln("Environment variable DATABASE not set")
 	}
 	e := echo.New()
 
@@ -34,20 +33,11 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 
-	db, err := sqlHelp.Open(dbName)
+	db, err := sqlHelp.Open(queryString)
 	if err != nil {
 		e.Logger.Fatal(err)
 	}
 	defer db.Close()
-
-	/*	c, err := ioutil.ReadFile(sqlFile)
-		if err != nil {
-			e.Logger.Fatal(err)
-		}
-		_, err = db.Exec(string(c))
-		if err != nil {
-			e.Logger.Fatal(err)
-		}*/
 
 	link := handler.NewLink(db)
 	user := handler.NewUser(db, secret)
