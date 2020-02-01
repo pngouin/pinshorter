@@ -26,6 +26,7 @@ func (l Link) Scan(row *sql.Row) (models.Link, error) {
 		&result.URL,
 		&result.ApiPoint,
 		&created,
+		&result.User.Id,
 	)
 
 	if err != nil {
@@ -54,6 +55,8 @@ func (l Link) ScanRows(rows *sql.Rows) ([]models.Link, error) {
 			&result.URL,
 			&result.ApiPoint,
 			&created,
+			&result.User.Id,
+			&result.User.Name,
 		)
 
 		if err != nil {
@@ -82,13 +85,13 @@ func (l Link) Delete(link models.Link) error {
 }
 
 func (l Link) GetByID(link models.Link) (models.Link, error) {
-	row := l.db.QueryRow("SELECT link_id, title, url, api_point, created_at from links where link_id=$1 and deleted_at is null", link.Id)
+	row := l.db.QueryRow("SELECT link_id, title, url, api_point, created_at, links.user_id from links where link_id=$1 and deleted_at is null", link.Id)
 	result, err := l.Scan(row)
 	return result, err
 }
 
 func (l Link) GetAllByUser(user models.UserInfo) ([]models.Link, error) {
-	rows, err := l.db.Query("select link_id, title, url, api_point, link.created_at from links join user u on link.user_id = u.user_id where u.user_id=$1 and u.deleted_at is null", user.Id)
+	rows, err := l.db.Query("select link_id, title, url, api_point, links.created_at, u.user_id, u.name from links join users u on links.user_id = u.user_id where u.user_id=$1 and u.deleted_at is null", user.Id)
 	if err != nil {
 		return nil, err
 	}
@@ -106,6 +109,6 @@ func (l Link) IsApiPointExist(str string) bool {
 }
 
 func (l Link) GetByAPIPoint(link models.Link) (models.Link, error) {
-	row := l.db.QueryRow("SELECT link_id, title, url, api_point, links.created_at from links where api_point=$1 and deleted_at is null ", link.ApiPoint)
+	row := l.db.QueryRow("SELECT link_id, title, url, api_point, links.created_at, links.user_id from links where api_point=$1 and deleted_at is null ", link.ApiPoint)
 	return l.Scan(row)
 }

@@ -7,7 +7,6 @@ import (
 	"github.com/ZooPin/pinshorter/handler"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"io/ioutil"
 	"log"
 	"os"
 	"os/signal"
@@ -19,7 +18,7 @@ var dbName string
 var secret string
 
 func init() {
-	flag.StringVar(&sqlFile, "sql", "create_sqlite.sql", "Path to the sql file to create the database.")
+	flag.StringVar(&sqlFile, "sql", "create_postgres.sql", "Path to the sql file to create the database.")
 	flag.StringVar(&dbName, "database", "db/database.db", "Path to the database.")
 	secret = os.Getenv("PINSHORTER_SECRET")
 	flag.Parse()
@@ -41,14 +40,14 @@ func main() {
 	}
 	defer db.Close()
 
-	c, err := ioutil.ReadFile(sqlFile)
-	if err != nil {
-		e.Logger.Fatal(err)
-	}
-	_, err = db.Exec(string(c))
-	if err != nil {
-		e.Logger.Fatal(err)
-	}
+	/*	c, err := ioutil.ReadFile(sqlFile)
+		if err != nil {
+			e.Logger.Fatal(err)
+		}
+		_, err = db.Exec(string(c))
+		if err != nil {
+			e.Logger.Fatal(err)
+		}*/
 
 	link := handler.NewLink(db)
 	user := handler.NewUser(db, secret)
