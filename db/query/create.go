@@ -1,3 +1,6 @@
+package query
+
+const CreatePostgresql = `
 SET TIMEZONE='Europe/Paris';
 
 CREATE TABLE IF NOT EXISTS users (
@@ -29,3 +32,4 @@ CREATE TABLE IF NOT EXISTS count (
 CREATE TABLE IF NOT EXISTS params (
                                     salt varchar
 );
+`
