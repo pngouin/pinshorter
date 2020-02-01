@@ -2,10 +2,10 @@ package db
 
 import (
 	"database/sql"
-	_ "github.com/mattn/go-sqlite3"
+	_ "github.com/lib/pq"
 )
 
-const sqlDriver = "sqlite3"
+const sqlDriver = "postgres"
 
 func Open(path string) (*sql.DB, error) {
 	database, err := sql.Open(sqlDriver, path)

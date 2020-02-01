@@ -71,24 +71,24 @@ func (l Link) ScanRows(rows *sql.Rows) ([]models.Link, error) {
 
 func (l Link) Create(link models.Link) (models.Link, error) {
 	link.Id = createUUID()
-	_, err := l.db.Exec("INSERT INTO link (link_id, title, url, api_point, created_at, user_id) VALUES (?, ?, ?, ?, CAST(datetime('now') as TEXT), ?)",
+	_, err := l.db.Exec("INSERT INTO links (link_id, title, url, api_point, created_at, user_id) VALUES ($1, $2, $3, $4, now(), $5)",
 		link.Id, link.Title, link.URL, link.ApiPoint, link.User.Id)
 	return link, err
 }
 
 func (l Link) Delete(link models.Link) error {
-	_, err := l.db.Exec("UPDATE link SET deleted_at=CAST(datetime('now') as TEXT) WHERE link_id=? AND user_id=? AND deleted_at is NULL", link.Id, link.User.Id)
+	_, err := l.db.Exec("UPDATE links SET deleted_at=now() WHERE link_id=$1 AND user_id=$2 AND deleted_at is NULL", link.Id, link.User.Id)
 	return err
 }
 
 func (l Link) GetByID(link models.Link) (models.Link, error) {
-	row := l.db.QueryRow("SELECT link_id, title, url, api_point, created_at from link where link_id=? and deleted_at is null", link.Id)
+	row := l.db.QueryRow("SELECT link_id, title, url, api_point, created_at from links where link_id=$1 and deleted_at is null", link.Id)
 	result, err := l.Scan(row)
 	return result, err
 }
 
 func (l Link) GetAllByUser(user models.UserInfo) ([]models.Link, error) {
-	rows, err := l.db.Query("select link_id, title, url, api_point, link.created_at from link join user u on link.user_id = u.user_id where u.user_id=? and u.deleted_at is null", user.Id)
+	rows, err := l.db.Query("select link_id, title, url, api_point, link.created_at from links join user u on link.user_id = u.user_id where u.user_id=$1 and u.deleted_at is null", user.Id)
 	if err != nil {
 		return nil, err
 	}
@@ -97,7 +97,7 @@ func (l Link) GetAllByUser(user models.UserInfo) ([]models.Link, error) {
 
 func (l Link) IsApiPointExist(str string) bool {
 	var result int
-	row := l.db.QueryRow("select count(*) from link where api_point=? ", str)
+	row := l.db.QueryRow("select count(*) from links where api_point=? ", str)
 	err := row.Scan(&result)
 	if err != nil {
 		return false
@@ -106,6 +106,6 @@ func (l Link) IsApiPointExist(str string) bool {
 }
 
 func (l Link) GetByAPIPoint(link models.Link) (models.Link, error) {
-	row := l.db.QueryRow("SELECT link_id, title, url, api_point, link.created_at from link where api_point=? and deleted_at is null ", link.ApiPoint)
+	row := l.db.QueryRow("SELECT link_id, title, url, api_point, links.created_at from links where api_point=$1 and deleted_at is null ", link.ApiPoint)
 	return l.Scan(row)
 }

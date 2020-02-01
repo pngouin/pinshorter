@@ -31,26 +31,26 @@ func (u User) ScanInfo(row *sql.Row) (models.UserInfo, error) {
 
 func (u User) Add(user models.UserConn) (models.UserInfo, error) {
 	user.Id = createUUID()
-	_, err := u.db.Exec("INSERT INTO user (user_id, name, password, created_at) VALUES (?, ?, ?, cast(datetime('now') as text))",
+	_, err := u.db.Exec("INSERT INTO users (user_id, name, password, created_at) VALUES ($1, $2, $3, now())",
 		user.Id, user.Name, u.crypt.Hash(user.Password))
 	return user.ToUserInfo(), err
 }
 
 func (u User) Connection(conn models.UserConn) (models.UserInfo, bool, error) {
 	var pass int
-	row := u.db.QueryRow("SELECT user_id, count(*) from user where name=? and password=? and deleted_at is null", conn.Name, u.crypt.Hash(conn.Password))
+	row := u.db.QueryRow("SELECT user_id, count(*) from users where name=$1 and password=$2 and deleted_at is null group by user_id", conn.Name, u.crypt.Hash(conn.Password))
 	err := row.Scan(&conn.Id, &pass)
 	return conn.ToUserInfo(), pass != 0, err
 }
 
 func (u User) GetById(user models.UserInfo) (models.UserInfo, error) {
-	row := u.db.QueryRow("SELECT user_id, name FROM user WHERE user_id=? AND deleted_at IS NULL", user.Id)
+	row := u.db.QueryRow("SELECT user_id, name FROM user WHERE user_id=$1 AND deleted_at IS NULL", user.Id)
 	return u.ScanInfo(row)
 }
 
 func (u User) IsUserExist(user models.UserInfo) bool {
 	var result int
-	row := u.db.QueryRow("select count(*) from user where user_id=? and name=? and deleted_at is null", user.Id, user.Name)
+	row := u.db.QueryRow("select count(*) from users where user_id=$1 and name=$2 and deleted_at is null", user.Id, user.Name)
 	err := row.Scan(&result)
 	if err != nil {
 		return false

@@ -19,7 +19,7 @@ var dbName string
 var secret string
 
 func init() {
-	flag.StringVar(&sqlFile, "sql", "create.sql", "Path to the sql file to create the database.")
+	flag.StringVar(&sqlFile, "sql", "create_sqlite.sql", "Path to the sql file to create the database.")
 	flag.StringVar(&dbName, "database", "db/database.db", "Path to the database.")
 	secret = os.Getenv("PINSHORTER_SECRET")
 	flag.Parse()
