@@ -53,7 +53,7 @@ func main() {
 	user := handler.NewUser(db, secret)
 
 	e.GET("/:api_point", link.Redirect)
-	e.POST("login", user.Login)
+	e.POST("auth", user.Login)
 
 	p := e.Group("/link")
 	p.Use(middleware.JWT([]byte(secret)))
