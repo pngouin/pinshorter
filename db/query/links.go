@@ -5,10 +5,10 @@ SELECT l.link_id, title, url, api_point, l.created_at, u.user_id, u.name, count(
     FROM links l
     INNER JOIN users u
         ON l.user_id = u.user_id
-    INNER JOIN count c
-        ON l.user_id = u.user_id
+    LEFT JOIN count c
+        ON l.link_id = c.link_id
     WHERE
-        u.user_id=$1 AND u.deleted_at is null
+        u.user_id=$1 AND u.deleted_at is null AND l.deleted_at is null
     GROUP BY l.link_id, u.user_id;
 `
 
