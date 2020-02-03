@@ -17,7 +17,7 @@ export class LinkService {
   }
 
   delete(link: Link): Observable<void> {
-    return this.httpClient.delete<void>(`/link/${link.apiPoint}`);
+    return this.httpClient.delete<void>(`/link/${link.id}`);
   }
 
   list(): Observable<Link[]> {

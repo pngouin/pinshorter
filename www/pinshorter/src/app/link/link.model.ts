@@ -3,7 +3,7 @@ export class Link {
     title: string;
     url: string;
     count: number;
-    apiPoint: string;
+    api_point: string;
     createdAt: Date;
     user : {
         id: string;
