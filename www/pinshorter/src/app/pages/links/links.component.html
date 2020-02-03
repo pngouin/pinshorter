@@ -1,2 +1,14 @@
-<app-create-link (created)="linkCreated($event)" ></app-create-link>
-<app-list-link [listener]="parentSubject" ></app-list-link>
+<nz-layout>
+    <nz-header>
+    </nz-header>
+    <nz-content>
+        <div class="inner-content">
+            <nz-divider nzText="Add a link" nzOrientation="left"></nz-divider>
+            <app-create-link (created)="linkCreated($event)"></app-create-link>
+            <nz-divider nzText="List of links" nzOrientation="left"></nz-divider>
+            <app-list-link [listener]="parentSubject"></app-list-link>
+        </div>
+    </nz-content>
+    <nz-footer>Made with ❤️ by Pingouin</nz-footer>
+</nz-layout>
+
