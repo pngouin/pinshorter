@@ -22,7 +22,6 @@ export class AuthService {
     return this.http.post<Token>(`/auth`, conn).pipe(map(
         token => {
           let user = this.jwtInformation(token.token)
-          console.log(user)
           localStorage.setItem('user', JSON.stringify(user));
           this.currentUserSubject.next(user);
           return token;
@@ -42,7 +41,6 @@ export class AuthService {
   jwtInformation(str: string): User {
     let user = JSON.parse(atob(str.split('.', -1)[1])) as User;
     user.token = str;
-    console.log(user)
     return user;
   }
   

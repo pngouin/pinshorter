@@ -39,16 +39,13 @@ export class LoginComponent implements OnInit {
       this.validateForm.controls[i].markAsDirty();
       this.validateForm.controls[i].updateValueAndValidity();
     }
-    console.log("bitch")
     this.authService.auth(this.validateForm.value as Connection)
       .pipe(first())
       .subscribe(
         data => {
-          console.log("yeah")
           this.router.navigateByUrl(this.returnUrl)
         },
         err => {
-          console.log(err)
           this.error = err;
           
         }
