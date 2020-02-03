@@ -1,0 +1,17 @@
+<form nz-form [nzLayout]="'inline'" [formGroup]="validateForm" class="login-form" (ngSubmit)="submitForm()">
+    <nz-form-item>
+        <nz-form-control nzErrorTip="Please enter a correct URL">
+            <nz-input-group nzPrefixIcon="link">
+                <input type="text" nz-input formControlName="url" placeholder="URL" />
+            </nz-input-group>
+        </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-control>
+            <button nz-button class="login-form-button" [nzType]="'primary'">Add</button>
+        </nz-form-control>
+    </nz-form-item>
+</form>
+
+<p>{{validateForm.value | json}}</p>
+<p>{{validateForm.status | json}}</p>
