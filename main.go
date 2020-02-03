@@ -19,7 +19,7 @@ var secret string
 var dev bool
 
 func init() {
-	queryString = os.Getenv("DATABASE")
+	queryString = os.Getenv("DATABASE_URL")
 	secret = os.Getenv("PINSHORTER_SECRET")
 	flag.BoolVar(&dev, "dev", false, "Dev configuration server.")
 	flag.Parse()
@@ -62,7 +62,7 @@ func main() {
 
 	// Start server
 	go func() {
-		if err := e.Start(":1323"); err != nil {
+		if err := e.Start(":5000"); err != nil {
 			e.Logger.Info("shutting down the server")
 		}
 	}()
