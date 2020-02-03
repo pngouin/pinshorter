@@ -15,12 +15,13 @@ import (
 
 var queryString string
 var secret string
-
+var port string
 var dev bool
 
 func init() {
 	queryString = os.Getenv("DATABASE_URL")
 	secret = os.Getenv("PINSHORTER_SECRET")
+	port = os.Getenv("PORT")
 	flag.BoolVar(&dev, "dev", false, "Dev configuration server.")
 	flag.Parse()
 }
@@ -62,7 +63,7 @@ func main() {
 
 	// Start server
 	go func() {
-		if err := e.Start(":5000"); err != nil {
+		if err := e.Start(":"+ port); err != nil {
 			e.Logger.Info("shutting down the server")
 		}
 	}()

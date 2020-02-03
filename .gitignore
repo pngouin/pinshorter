@@ -34,3 +34,4 @@ e2e_test.*
 !database.db
 
 !/**/.gitkeep
+!/www/dist
