@@ -14,6 +14,7 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthModule } from './auth/auth.module';
 import { ErrorInterceptor } from './auth/error.interceptor';
 import { EnvInterceptor } from './auth/env.interceptor';
+import { PagesModule } from './pages/pages.module';
 
 registerLocaleData(en);
 
@@ -27,8 +28,8 @@ registerLocaleData(en);
     NgZorroAntdModule,
     FormsModule,
     BrowserAnimationsModule,
-    LinkModule,
-    AuthModule
+    AuthModule,
+    PagesModule
   ],
   providers: [
     { provide: NZ_I18N, useValue: en_US },
