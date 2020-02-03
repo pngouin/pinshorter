@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { LinkService } from '../link.service';
 import { Link } from '../link.model';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-list-link',
@@ -10,8 +11,14 @@ import { Link } from '../link.model';
 export class ListLinkComponent implements OnInit {
 
   constructor(private linkService: LinkService) { }
+  
+  @Input() listener:Subject<Link>;
 
   ngOnInit() {
+    this.listener.subscribe( link => {
+      this.listOfData.push(link)
+      this.displayedData = [...this.listOfData]
+    })
     this.linkService.list().subscribe(links => {
       this.listOfData = links;
       this.displayedData = [...this.listOfData]

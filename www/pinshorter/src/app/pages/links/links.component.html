@@ -1,2 +1,2 @@
-<app-create-link></app-create-link>
-<app-list-link></app-list-link>
+<app-create-link (created)="linkCreated($event)" ></app-create-link>
+<app-list-link [listener]="parentSubject" ></app-list-link>
