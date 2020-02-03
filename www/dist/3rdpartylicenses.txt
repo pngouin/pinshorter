@@ -175,6 +175,8 @@ ng-zorro-antd/table
 
 ng-zorro-antd/tooltip
 
+ng-zorro-antd/typography
+
 regenerator-runtime
 MIT
 MIT License
