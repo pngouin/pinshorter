@@ -28,11 +28,16 @@ export class ListLinkComponent implements OnInit {
   listOfData: Link[] = [];
   displayedData: Link[] = [];
 
+  getApiURL(link: Link): string {
+    return `${window.location.origin}/${link.api_point}`
+  }
+
   delete(link: Link): void {
     this.linkService.delete(link).subscribe(
       () => {
         const index = this.listOfData.indexOf(link);
         if (index > -1) {
+          console.log(link)
           this.listOfData.splice(index, 1);
           this.displayedData = [...this.listOfData]
         }
