@@ -41,11 +41,11 @@ func main() {
 
 	link := handler.NewLink(db)
 	user := handler.NewUser(db, secret)
+    g := e.Group("/api")
+	g.GET("/:api_point", link.Redirect)
+	g.POST("auth", user.Login)
 
-	e.GET("/:api_point", link.Redirect)
-	e.POST("auth", user.Login)
-
-	p := e.Group("/link")
+	p := g.Group("/link")
 	p.Use(middleware.JWT([]byte(secret)))
 	p.PUT("", link.Add)
 	p.DELETE("/:api_point", link.Delete)
