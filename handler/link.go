@@ -28,6 +28,9 @@ func (l Link) Redirect(c echo.Context) error {
 	link := models.Link{
 		ApiPoint: c.Param("api_point"),
 	}
+	if link.ApiPoint == "" || len(link.ApiPoint) > services.ApiLength {
+		return echo.ErrNotFound
+	}
 	link, err := l.link.GetByApiPoint(link)
 	if err != nil {
 		jsonErr := models.Error{Error: err.Error()}

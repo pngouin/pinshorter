@@ -28,10 +28,10 @@ type Link struct {
 }
 
 const (
-	length  = 5
-	digits  = "0123456789"
-	letters = "abcdefghijklmnopqrstuvwxyz" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	all     = digits + letters
+	ApiLength = 5
+	digits    = "0123456789"
+	letters   = "abcdefghijklmnopqrstuvwxyz" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	all       = digits + letters
 )
 
 func (l Link) Add(link models.Link) (models.Link, error) {
@@ -49,7 +49,7 @@ func (l Link) Add(link models.Link) (models.Link, error) {
 		return link, err
 	}
 
-	link.ApiPoint = l.createRandomApiPoint(length)
+	link.ApiPoint = l.createRandomApiPoint(ApiLength)
 	link, err = l.database.Create(link)
 	return link, err
 }

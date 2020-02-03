@@ -2,8 +2,8 @@ package main
 
 import (
 	"context"
-    "flag"
-    sqlHelp "github.com/ZooPin/pinshorter/db"
+	"flag"
+	sqlHelp "github.com/ZooPin/pinshorter/db"
 	"github.com/ZooPin/pinshorter/handler"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
@@ -15,7 +15,6 @@ import (
 
 var queryString string
 var secret string
-
 
 var dev bool
 
@@ -39,8 +38,8 @@ func main() {
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 	if dev {
-	    e.Use(middleware.CORS())
-    }
+		e.Use(middleware.CORS())
+	}
 
 	db, err := sqlHelp.Open(queryString)
 	if err != nil {
@@ -48,10 +47,11 @@ func main() {
 	}
 	defer db.Close()
 
+	e.Static("/user", "www/dist")
 	link := handler.NewLink(db)
 	user := handler.NewUser(db, secret)
-    e.GET("/:api_point", link.Redirect)
-    g := e.Group("/api")
+	e.GET("/:api_point", link.Redirect)
+	g := e.Group("/api")
 	g.POST("/auth", user.Login)
 
 	p := g.Group("/link")
