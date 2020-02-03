@@ -33,6 +33,11 @@ func (u User) Login(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, jsonErr)
 	}
 
+	if user.Name == "" || user.Password == "" {
+	    jsonErr := models.Error{Error:"Input can't be empty."}
+	    return c.JSON(http.StatusBadRequest, jsonErr)
+    }
+
 	uInfo, ok, err := u.user.Connection(user)
 	if err != nil {
 		jsonErr := models.Error{Error: err.Error()}
