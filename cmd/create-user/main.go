@@ -9,18 +9,20 @@ import (
 	"log"
 	"os"
 	"strings"
-	"time"
 )
 
-var dbName string
+var queryString string
 
 func init() {
-	flag.StringVar(&dbName, "database", "", "Path to the database.")
+	queryString = os.Getenv("DATABASE_URL")
 	flag.Parse()
 }
 
 func main() {
-	sql, err := db.Open(dbName)
+	if queryString == "" {
+		log.Fatalln("Environment variable DATABASE_URL not set")
+	}
+	sql, err := db.Open(queryString)
 	if err != nil {
 		log.Fatalln("Cannot open the database: ", err)
 	}
@@ -39,14 +41,4 @@ func main() {
 		log.Fatalln("Error creating user: ", err)
 	}
 	log.Println("User created with name ", userInfo.Name, " and id ", userInfo.Id)
-	time.Sleep(10 * time.Second)
-	log.Println("Try to connect with the credentials")
-	userInfo, ok, err := user.Connection(userConn)
-	if err != nil {
-		log.Fatalln("Problem with the connection ", err)
-	}
-	if !ok {
-		log.Fatalln("Credentials doesn't match...")
-	}
-	log.Println("Success !")
 }
