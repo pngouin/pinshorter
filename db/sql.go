@@ -2,6 +2,7 @@ package db
 
 import (
 	"database/sql"
+	"github.com/ZooPin/pinshorter/db/query"
 	_ "github.com/lib/pq"
 )
 
@@ -12,5 +13,8 @@ func Open(path string) (*sql.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	return database, nil
+
+	_, err = database.Exec(query.CreatePostgresql)
+
+	return database, err
 }

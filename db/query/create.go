@@ -1,8 +1,6 @@
 package query
 
 const CreatePostgresql = `
-SET TIMEZONE='Europe/Paris';
-
 CREATE TABLE IF NOT EXISTS users (
                                      user_id uuid PRIMARY KEY,
                                      name varchar NOT NULL UNIQUE,
