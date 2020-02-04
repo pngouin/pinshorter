@@ -34,14 +34,14 @@ func (u User) Login(c echo.Context) error {
 	}
 
 	if user.Name == "" || user.Password == "" {
-	    jsonErr := models.Error{Error:"Input can't be empty."}
-	    return c.JSON(http.StatusBadRequest, jsonErr)
-    }
+		jsonErr := models.Error{Error: "Input can't be empty."}
+		return c.JSON(http.StatusBadRequest, jsonErr)
+	}
 
 	uInfo, ok, err := u.user.Connection(user)
 	if err != nil {
-		jsonErr := models.Error{Error: err.Error()}
-		return c.JSON(http.StatusBadRequest, jsonErr)
+		log.Println("Error: POST /auth user:", user.Name, "err:", err)
+		return echo.ErrBadRequest
 	}
 	if !ok {
 		return echo.ErrUnauthorized
@@ -51,7 +51,7 @@ func (u User) Login(c echo.Context) error {
 		Name: uInfo.Name,
 		Id:   uInfo.Id,
 		StandardClaims: jwt.StandardClaims{
-			ExpiresAt: time.Now().Add(72 * time.Hour).Unix(),
+			ExpiresAt: time.Now().Add(48 * time.Hour).Unix(),
 		},
 	}
 
@@ -61,6 +61,7 @@ func (u User) Login(c echo.Context) error {
 		log.Println("Error signing token: ", err)
 		return echo.ErrInternalServerError
 	}
+	log.Println("Info: POST /auth user:", uInfo.Id, "connected")
 
 	return c.JSON(http.StatusOK, map[string]string{
 		"token": t,

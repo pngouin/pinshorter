@@ -6,6 +6,7 @@ import (
 	"github.com/ZooPin/pinshorter/models"
 	"github.com/ZooPin/pinshorter/services"
 	"github.com/labstack/echo/v4"
+	"log"
 	"net/http"
 )
 
@@ -33,8 +34,8 @@ func (l Link) Redirect(c echo.Context) error {
 	}
 	link, err := l.link.GetByApiPoint(link)
 	if err != nil {
-		jsonErr := models.Error{Error: err.Error()}
-		return c.JSON(http.StatusBadRequest, jsonErr)
+		log.Println("Error: GET /", link.ApiPoint, "err:", err)
+		return echo.ErrBadRequest
 	}
 	defer l.link.AddCountToLink(link)
 	return c.Redirect(http.StatusPermanentRedirect, link.URL)
@@ -44,23 +45,23 @@ func (l Link) Redirect(c echo.Context) error {
 func (l Link) Add(c echo.Context) error {
 	var link models.Link
 
-	err := json.NewDecoder(c.Request().Body).Decode(&link)
-	if err != nil {
-		jsonErr := models.Error{Error: err.Error()}
-		return c.JSON(http.StatusBadRequest, jsonErr)
-	}
-
 	user := getUserJWT(c)
 	if !l.user.IsUserExist(user) {
-		jsonErr := models.Error{Error: errUserDontExist}
-		return c.JSON(http.StatusBadRequest, jsonErr)
+		log.Println("Error: PUT /add err: user don't exist id:", user.Id, "name:", user.Name)
+		return echo.ErrUnauthorized
 	}
 	link.User = user
 
+	err := json.NewDecoder(c.Request().Body).Decode(&link)
+	if err != nil {
+		log.Println("Error: PUT /add User:", user.Id, "err:", err)
+		return echo.ErrBadRequest
+	}
+
 	link, err = l.link.Add(link)
 	if err != nil {
-		jsonErr := models.Error{Error: err.Error()}
-		return c.JSON(http.StatusBadRequest, jsonErr)
+		log.Println("Error: PUT /add User:", user.Id, "err:", err)
+		return echo.ErrInternalServerError
 	}
 
 	return c.JSON(http.StatusCreated, link)
@@ -70,13 +71,13 @@ func (l Link) Add(c echo.Context) error {
 func (l Link) List(c echo.Context) error {
 	user := getUserJWT(c)
 	if !l.user.IsUserExist(user) {
-		jsonErr := models.Error{Error: errUserDontExist}
-		return c.JSON(http.StatusBadRequest, jsonErr)
+		log.Println("Error: GET /list", c.Param("id"), " err: user don't exist id:", user.Id, "name:", user.Name)
+		return echo.ErrUnauthorized
 	}
 	links, err := l.link.GetAllFromUser(user)
 	if err != nil {
-		jsonErr := models.Error{Error: err.Error()}
-		return c.JSON(http.StatusInternalServerError, jsonErr)
+		log.Println("Error: PUT /add User:", user.Id, "err:", err)
+		return echo.ErrInternalServerError
 	}
 	return c.JSON(http.StatusOK, links)
 }
@@ -85,8 +86,8 @@ func (l Link) List(c echo.Context) error {
 func (l Link) Delete(c echo.Context) error {
 	user := getUserJWT(c)
 	if !l.user.IsUserExist(user) {
-		jsonErr := models.Error{Error: errUserDontExist}
-		return c.JSON(http.StatusBadRequest, jsonErr)
+		log.Println("Error: DELETE /", c.Param("id"), " err: user don't exist id:", user.Id, "name:", user.Name)
+		return echo.ErrUnauthorized
 	}
 
 	var link models.Link
@@ -95,9 +96,10 @@ func (l Link) Delete(c echo.Context) error {
 
 	err := l.link.Delete(link)
 	if err != nil {
-		jsonErr := models.Error{Error: err.Error()}
-		return c.JSON(http.StatusInternalServerError, jsonErr)
+		log.Println("Error: DELETE /", link.Id, "user:", user.Id, "err:", err)
+		return echo.ErrInternalServerError
 	}
+	log.Println("Info: DELETE /", link.Id, "user:", user.Id, "deleted")
 
 	return c.NoContent(http.StatusOK)
 }
