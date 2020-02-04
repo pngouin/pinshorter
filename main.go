@@ -31,7 +31,7 @@ func main() {
 		log.Fatalln("Environment variable PINSHORTER_SECRET not set")
 	}
 	if queryString == "" {
-		log.Fatalln("Environment variable DATABASE not set")
+		log.Fatalln("Environment variable DATABASE_URL not set")
 	}
 	e := echo.New()
 
@@ -63,7 +63,7 @@ func main() {
 
 	// Start server
 	go func() {
-		if err := e.Start(":"+ port); err != nil {
+		if err := e.Start(":" + port); err != nil {
 			e.Logger.Info("shutting down the server")
 		}
 	}()
