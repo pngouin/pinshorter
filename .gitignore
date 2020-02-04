@@ -31,7 +31,8 @@ integration/bazel/bazel-*
 e2e_test.*
 *.log
 *.db
-!database.db
 
+# Other
+bin/
 !/**/.gitkeep
 !/www/dist
