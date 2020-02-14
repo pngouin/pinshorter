@@ -32,6 +32,10 @@ export class ListLinkComponent implements OnInit {
     return `${window.location.origin}/${link.api_point}`
   }
 
+  longStr(str: string): string {
+    return (str.length > 60)? `${str.substring(0, 60)}...`: str ;
+  }
+
   delete(link: Link): void {
     this.linkService.delete(link).subscribe(
       () => {
