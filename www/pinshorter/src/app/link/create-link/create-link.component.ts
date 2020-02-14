@@ -20,8 +20,20 @@ export class CreateLinkComponent implements OnInit {
       this.validateForm.controls[i].markAsDirty();
       this.validateForm.controls[i].updateValueAndValidity();
     }
-    this.linkService.add(this.validateForm.value as Link).subscribe(link => this.created.emit(link));
+    this.linkService.add(this.validateForm.value as Link).subscribe(link =>  {
+      this.created.emit(link)
+      this.copyToClipboard(link.api_point)
+    });
     this.validateForm.reset();
+  }
+
+  copyToClipboard(str: string) {
+    document.addEventListener('copy', (e: ClipboardEvent) => {
+      e.clipboardData.setData('text/plain', (`${window.location.origin}/${str}`));
+      e.preventDefault();
+      document.removeEventListener('copy', null);
+    });
+    document.execCommand('copy');
   }
 
   ngOnInit() {
