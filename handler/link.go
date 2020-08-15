@@ -3,8 +3,8 @@ package handler
 import (
 	"database/sql"
 	"encoding/json"
-	"github.com/ZooPin/pinshorter/models"
-	"github.com/ZooPin/pinshorter/services"
+	"github.com/pngouin/pinshorter/models"
+	"github.com/pngouin/pinshorter/services"
 	"github.com/labstack/echo/v4"
 	"log"
 	"net/http"

@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 	"flag"
-	sqlHelp "github.com/ZooPin/pinshorter/db"
-	"github.com/ZooPin/pinshorter/handler"
+	sqlHelp "github.com/pngouin/pinshorter/db"
+	"github.com/pngouin/pinshorter/handler"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"log"

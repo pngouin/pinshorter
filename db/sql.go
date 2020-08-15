@@ -2,7 +2,7 @@ package db
 
 import (
 	"database/sql"
-	"github.com/ZooPin/pinshorter/db/query"
+	"github.com/pngouin/pinshorter/db/query"
 	_ "github.com/lib/pq"
 )
 

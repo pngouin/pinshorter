@@ -2,8 +2,8 @@ package db
 
 import (
 	"database/sql"
-	"github.com/ZooPin/pinshorter/db/query"
-	"github.com/ZooPin/pinshorter/models"
+	"github.com/pngouin/pinshorter/db/query"
+	"github.com/pngouin/pinshorter/models"
 )
 
 func NewUser(db *sql.DB) User {

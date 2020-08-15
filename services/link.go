@@ -3,8 +3,8 @@ package services
 import (
 	"database/sql"
 	"errors"
-	"github.com/ZooPin/pinshorter/db"
-	"github.com/ZooPin/pinshorter/models"
+	"github.com/pngouin/pinshorter/db"
+	"github.com/pngouin/pinshorter/models"
 	"golang.org/x/net/html"
 	"log"
 	"math/rand"

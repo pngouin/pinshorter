@@ -1,3 +1,5 @@
+github.com/pngouin/pinshorter v0.0.0-20200815125746-7ec0da24a0d0 h1:z13NIxTvPfJnYIXoji4CqcxptCe0D1kPG2O1SbwM5s8=
+github.com/pngouin/pinshorter v0.0.0-20200815125746-7ec0da24a0d0/go.mod h1:C2BPNbT7FA1Wptn+8fEqVJj3RB7QTi+m11O0/nvtD9Q=
 github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/dgrijalva/jwt-go v3.2.0+incompatible h1:7qlOGliEKZXTDg6OTjfoBKDXWrumCAMpl/TFQ4/5kLM=

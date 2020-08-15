@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"github.com/ZooPin/pinshorter/models"
+	"github.com/pngouin/pinshorter/models"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/labstack/echo/v4"
 )

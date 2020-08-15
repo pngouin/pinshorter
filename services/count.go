@@ -2,8 +2,8 @@ package services
 
 import (
 	"database/sql"
-	"github.com/ZooPin/pinshorter/db"
-	"github.com/ZooPin/pinshorter/models"
+	"github.com/pngouin/pinshorter/db"
+	"github.com/pngouin/pinshorter/models"
 )
 
 func NewCount(sql *sql.DB) Count {
