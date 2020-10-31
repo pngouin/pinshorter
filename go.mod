@@ -1,6 +1,6 @@
 module github.com/pngouin/pinshorter
 
-go 1.13
+go 1.15.3
 
 require (
 	github.com/pngouin/pinshorter v0.0.0-20200815125746-7ec0da24a0d0
